@@ -31,7 +31,7 @@ namespace RentCar
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
@@ -39,7 +39,7 @@ namespace RentCar
             {
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(50);
-                options.LoginPath = "Usuarios/Login";
+                options.LoginPath = "/Usuarios/Login";
                 options.SlidingExpiration = true;
             });
 
@@ -61,6 +61,8 @@ namespace RentCar
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, Role>().AddDefaultUI().AddEntityFrameworkStores<Context>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddScoped<SignInManager<User>, SignInManager<User>>();
+            services.AddScoped<UserManager<User>, UserManager<User>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
