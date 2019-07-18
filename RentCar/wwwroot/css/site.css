@@ -34,3 +34,8 @@ body {
         display: none;
     }
 }
+
+.botoes {
+    margin: 5px;
+    display:inline;
+}

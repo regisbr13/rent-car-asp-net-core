@@ -35,14 +35,6 @@ namespace RentCar
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(50);
-                options.LoginPath = "/Usuarios/Login";
-                options.SlidingExpiration = true;
-            });
-
             services.Configure<IdentityOptions>(options =>
             {
                 options.User.AllowedUserNameCharacters =
@@ -59,10 +51,18 @@ namespace RentCar
             services.AddDbContext<Context>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User, Role>().AddDefaultUI().AddEntityFrameworkStores<Context>();
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<SignInManager<User>, SignInManager<User>>();
             services.AddScoped<UserManager<User>, UserManager<User>>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(50);
+                options.SlidingExpiration = true;
+                options.LoginPath = "/Entrar";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,7 +89,7 @@ namespace RentCar
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Accounts}/{action=Index}/{id?}");
             });
         }
     }

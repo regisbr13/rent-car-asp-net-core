@@ -1,0 +1,35 @@
+﻿@model RentCar.Models.Role
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Novo nível de acesso";
+}
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Excluir nível de acesso</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Name" />
+            <input type="hidden" asp-for="Description" />
+            <input type="hidden" asp-for="NormalizedName" />
+            <input type="hidden" asp-for="ConcurrencyStamp" />
+            <div class="modal-body">
+                <p>
+                    Deseja mesmo excluir o nível de acesso <strong>@Model.Name</strong>?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

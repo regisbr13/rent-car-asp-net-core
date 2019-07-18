@@ -1,0 +1,86 @@
+﻿@model RentCar.Models.ViewModels.RegisterFormViewModel
+
+@{
+    ViewData["Title"] = "Registrar";
+}
+<br />
+<div class="container">
+    <div class="col-md-6 border border-light rounded shadow">
+        <h4 class=" text-center">Registrar usuário</h4>
+        <hr />
+        <form asp-action="Register">
+            <div class="form-group col-md-10">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Cpf" class="control-label"></label>
+                    <input asp-for="Cpf" class="form-control cpf" />
+                    <span asp-validation-for="Cpf" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control phone" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EmailConf" class="control-label"></label>
+                    <input asp-for="EmailConf" class="form-control" />
+                    <span asp-validation-for="EmailConf" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PasswordConf" class="control-label"></label>
+                    <input asp-for="PasswordConf" class="form-control" />
+                    <span asp-validation-for="PasswordConf" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <button type="submit" class="btn btn-outline-success">Registrar</button>
+                <a asp-action="Login" class="btn btn-outline-secondary botoes">Entrar</a>
+            </div>
+        </form>
+        <div class="col-md-6">
+            <form asp-action="Login">
+                <input type="hidden" name="UserName" value="visitante" />
+                <input type="hidden" name="Password" value="abc123" />
+                <input type="hidden" name="Checkbox" value="true" />
+                <button type="submit" class="btn  btn-outline-info">Entrar como visitante</button>
+            </form>
+        </div>
+        <br />
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+    <script>
+        $(function () {
+            $(".cpf").mask("999.999.999-99");
+        });
+        $(function () {
+            $(".phone").mask("(99) 9 9999-9999");
+        });
+    </script>
+}
+
+
+
