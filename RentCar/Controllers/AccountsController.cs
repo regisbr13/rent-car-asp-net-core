@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RentCar.Models;
 using RentCar.Models.ViewModels;
+using RentCar.Services.Interfaces;
 
 namespace RentCar.Controllers
 {
@@ -12,18 +13,21 @@ namespace RentCar.Controllers
     {
         private readonly SignInManager<User> _loginManager;
         private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
 
-        public AccountsController(SignInManager<User> loginManager, UserManager<User> userManager)
+        public AccountsController(SignInManager<User> loginManager, UserManager<User> userManager, IUserService userService)
         {
             _loginManager = loginManager;
             _userManager = userManager;
+            _userService = userService;
         }
 
         [Authorize]
         [HttpGet("/")]
         public async Task<IActionResult> Index()
         {
-            return View(await _userManager.GetUserAsync(User));
+            var user = await _userService.FindByIdAsync(_userManager.GetUserId(User));
+            return View(user);
         }
 
         // Registro de usuários:

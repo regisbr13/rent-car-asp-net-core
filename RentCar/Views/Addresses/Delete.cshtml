@@ -1,27 +1,26 @@
-﻿@model RentCar.Models.Role
+﻿@model RentCar.Models.Address
 
 @{
     Layout = null;
-    ViewData["Title"] = "Deletar nível de acesso";
+    ViewData["Title"] = "Deletar endereço";
 }
 
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Excluir nível de acesso</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">Excluir endereço</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <form asp-action="Delete">
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="Name" />
-            <input type="hidden" asp-for="Description" />
-            <input type="hidden" asp-for="NormalizedName" />
-            <input type="hidden" asp-for="ConcurrencyStamp" />
             <div class="modal-body">
                 <p>
-                    Deseja mesmo excluir o nível de acesso <strong>@Model.Name</strong>?
+                    Deseja mesmo excluir o endereço?
+                </p>
+                <p>
+                    Rua <strong>@Model.Street</strong>, n° <strong>@Model.Number</strong> - <strong>@Model.District</strong>, <strong>@Model.City</strong> - <strong>@Model.State</strong>
                 </p>
             </div>
             <div class="modal-footer">

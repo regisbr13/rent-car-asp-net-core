@@ -13,6 +13,8 @@ using RentCar.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RentCar.Models;
+using RentCar.Services.Interfaces;
+using RentCar.Services;
 
 namespace RentCar
 {
@@ -64,6 +66,8 @@ namespace RentCar
                 options.LoginPath = "/Entrar";
             });
 
+            services.AddTransient<IAddressService, AddressService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -36,3 +36,30 @@ $(function () {
         })
     })
 });
+
+$(function () {
+    $(".addressCreate").click(function () {
+        var userId = $(this).attr("data-userId");
+        $("#modal").load("/Enderecos/Novo?UserId=" + userId, function () {
+            $("#modal").modal();
+        })
+    })
+});
+
+$(function () {
+    $(".editAddress").click(function () {
+        var id = $(this).attr("data-id");
+        $("#modal").load("/Enderecos/Editar?Id=" + id, function () {
+            $("#modal").modal();
+        })
+    })
+});
+
+$(function () {
+    $(".delAddress").click(function () {
+        var id = $(this).attr("data-id");
+        $("#modal").load("/Enderecos/Deletar?Id=" + id, function () {
+            $("#modal").modal();
+        })
+    })
+});
