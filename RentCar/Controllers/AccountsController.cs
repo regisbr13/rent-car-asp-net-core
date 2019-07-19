@@ -120,17 +120,29 @@ namespace RentCar.Controllers
         }
 
         // Usuário existe:
-        public async Task<JsonResult> UserNameExist(string username)
+        public async Task<JsonResult> UserNameExist(string username, string Id)
         {
-            if (await _userManager.FindByNameAsync(username) != null)
+            if(string.IsNullOrEmpty(Id) && await _userManager.FindByNameAsync(username) != null)
                 return Json("nome de usuário já cadastrado");
-            return Json(true);
+            else if(!string.IsNullOrEmpty(Id) && await _userManager.FindByNameAsync(username) != null)
+            {
+                var obj = await _userManager.FindByNameAsync(username);
+                if(obj.Id != Id)
+                    return Json("nome de usuário já cadastrado");
+            }
+                return Json(true);
         }
 
-        public async Task<JsonResult> UserEmailExist(string email)
+        public async Task<JsonResult> UserEmailExist(string email, string Id)
         {
-            if (await _userManager.FindByEmailAsync(email) != null)
-                return Json("email já cadastrado");
+            if (string.IsNullOrEmpty(Id) && await _userManager.FindByEmailAsync(email) != null)
+                return Json("nome de usuário já cadastrado");
+            else if (!string.IsNullOrEmpty(Id) && await _userManager.FindByEmailAsync(email) != null)
+            {
+                var obj = await _userManager.FindByEmailAsync(email);
+                if (obj.Id != Id)
+                    return Json("nome de usuário já cadastrado");
+            }
             return Json(true);
         }
 
@@ -143,6 +155,48 @@ namespace RentCar.Controllers
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
             };
             return View(viewModel);
+        }
+
+        [HttpGet("Atualizar")]
+        public async Task<IActionResult> Edit(string Id)
+        {
+            if (Id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id nulo" });
+            }
+
+            var obj = await _userManager.FindByIdAsync(Id);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
+            }
+
+            var viewModel = new RegisterFormViewModel { Id = obj.Id, Cpf = obj.Cpf, Email = obj.Email, EmailConf = obj.Email, Name = obj.Name, PhoneNumber = obj.PhoneNumber, UserName = obj.UserName };
+
+            return View(viewModel);
+        }
+
+        [HttpPost("Atualizar")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(RegisterFormViewModel viewModel)
+        {
+            var user = await _userManager.FindByIdAsync(viewModel.Id);
+
+            user.UserName = viewModel.UserName;
+            user.Email = viewModel.Email;
+            user.Cpf = viewModel.Cpf;
+            user.PhoneNumber = viewModel.PhoneNumber;
+            user.Name = viewModel.Name;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                TempData["confirm"] = user.UserName + " atualizado com sucesso.";
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["erro"] = "Não foi possível atualizar";
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -51,7 +51,7 @@ namespace RentCar
             services.AddDbContext<Context>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<SignInManager<User>, SignInManager<User>>();
             services.AddScoped<UserManager<User>, UserManager<User>>();
@@ -63,6 +63,7 @@ namespace RentCar
                 options.SlidingExpiration = true;
                 options.LoginPath = "/Entrar";
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

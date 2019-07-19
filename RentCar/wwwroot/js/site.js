@@ -27,3 +27,12 @@ $(function () {
         })
     })
 });
+
+$(function () {
+    $(".editUser").click(function () {
+        var id = $(this).attr("data-id");
+        $("#modal").load("/Atualizar?Id=" + id, function () {
+            $("#modal").modal();
+        })
+    })
+});

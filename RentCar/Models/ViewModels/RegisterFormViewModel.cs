@@ -5,10 +5,12 @@ namespace RentCar.Models.ViewModels
 {
     public class RegisterFormViewModel
     {
+        public string Id { get; set; }
+
         [Display(Name = "Nome de usuário")]
         [Required(ErrorMessage = "campo obrigatório")]
         [StringLength(15, MinimumLength = 6, ErrorMessage = "o nome de usuário deve conter de {2} a {1} caracteres")]
-        [Remote("UserNameExist", "Account")]
+        [Remote("UserNameExist", "Accounts", AdditionalFields = "Id")]
         public string UserName { get; set; }
 
         [Display(Name = "Nome completo")]
@@ -27,7 +29,7 @@ namespace RentCar.Models.ViewModels
         [Display(Name = "Email")]
         [Required(ErrorMessage = "campo obrigatório")]
         [EmailAddress(ErrorMessage = "entre com um email válido")]
-        [Remote("UserEmailExist", "Account")]
+        [Remote("UserEmailExist", "Accounts", AdditionalFields = "Id")]
         public string Email { get; set; }
 
         [Display(Name = "Confirmar email")]

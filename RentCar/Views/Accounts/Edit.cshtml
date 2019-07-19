@@ -1,0 +1,67 @@
+﻿@model RentCar.Models.ViewModels.RegisterFormViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Atualizar usuário";
+}
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Atualizar dados do usuário</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form asp-action="Edit">
+            <div class="modal-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Password" />
+                <input type="hidden" asp-for="PasswordConf" />
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-label"></label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Cpf" class="control-label"></label>
+                    <input asp-for="Cpf" class="form-control cpf" />
+                    <span asp-validation-for="Cpf" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control phone" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-outline-primary btn-sm">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(function () {
+            $(".cpf").mask("999.999.999-99");
+        });
+        $(function () {
+            $(".phone").mask("(99) 9 9999-9999");
+        });
+    </script>
+
+
+
