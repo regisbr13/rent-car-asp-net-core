@@ -63,3 +63,21 @@ $(function () {
         })
     })
 });
+
+$(function () {
+    $(".delUser").click(function () {
+        var id = $(this).attr("data-id");
+        $("#modal").load("/Excluir?Id=" + id, function () {
+            $("#modal").modal();
+        })
+    })
+});
+
+$(function () {
+    $(".editUserRole").click(function () {
+        var id = $(this).attr("data-id");
+        $("#modal").load("/Editar-nivel-de-acesso?Id=" + id, function () {
+            $("#modal").modal();
+        })
+    })
+});

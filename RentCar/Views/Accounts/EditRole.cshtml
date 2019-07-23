@@ -1,0 +1,35 @@
+﻿@model RentCar.Models.User
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Deletar usuário";
+}
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Mudar nível de acesso</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form asp-action="EditRole">
+            <input type="hidden" asp-for="Id" />
+            <div class="modal-body">
+                <p>
+                    Selecione o nível de acesso do usuário <strong>@Model.Name</strong>:
+                </p>
+                <div class="form-group">
+                    <label class="control-label">Nível de acesso</label>
+                    <select asp-items="@ViewBag.roles" name="role" class="custom-select"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

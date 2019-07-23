@@ -12,6 +12,8 @@ namespace RentCar.Data.Map
             builder.Property(x => x.Cpf).IsRequired();
             builder.HasIndex(x => x.Cpf).IsUnique();
 
+            builder.HasMany(x => x.Addresses).WithOne(x => x.User).OnDelete(DeleteBehavior.Cascade);
+
             builder.ToTable("Usuarios");
         }
     }

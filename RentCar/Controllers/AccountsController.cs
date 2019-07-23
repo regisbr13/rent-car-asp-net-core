@@ -1,8 +1,11 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using RentCar.Models;
 using RentCar.Models.ViewModels;
 using RentCar.Services.Interfaces;
@@ -14,12 +17,14 @@ namespace RentCar.Controllers
         private readonly SignInManager<User> _loginManager;
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
+        private readonly RoleManager<Role> _roleManager;
 
-        public AccountsController(SignInManager<User> loginManager, UserManager<User> userManager, IUserService userService)
+        public AccountsController(SignInManager<User> loginManager, UserManager<User> userManager, IUserService userService, RoleManager<Role> roleManager)
         {
             _loginManager = loginManager;
             _userManager = userManager;
             _userService = userService;
+            _roleManager = roleManager;
         }
 
         [Authorize]
@@ -201,6 +206,77 @@ namespace RentCar.Controllers
             }
             TempData["erro"] = "Não foi possível atualizar";
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet("Excluir")]
+        public async Task<IActionResult> Delete(string Id)
+        {
+            if (Id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id nulo" });
+            }
+
+            var obj = await _userManager.FindByIdAsync(Id);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost("Excluir")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConf(string id)
+        {
+
+                var user = await _userManager.FindByIdAsync(id);
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    TempData["confirm"] = user.Name + " foi deletado com sucesso.";
+                    return RedirectToAction(nameof(Index), "Roles");
+                }
+            TempData["erro"] = "Não foi possível deletar o usuário";
+            return RedirectToAction(nameof(Index), "Roles");
+        }
+
+        [HttpGet("Editar-nivel-de-acesso")]
+        public async Task<IActionResult> EditRole(string Id)
+        {
+            if (Id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id nulo" });
+            }
+
+            var obj = await _userManager.FindByIdAsync(Id);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
+            }
+            
+            var list = await _roleManager.Roles.ToListAsync();
+            ViewBag.roles = new SelectList(list, "Name", "Name");
+            return View(obj);
+        }
+
+        [HttpPost("Editar-nivel-de-acesso")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditRole(string id, string role)
+        {
+
+            var user = await _userManager.FindByIdAsync(id);
+            var userRole = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRoleAsync(user, userRole.FirstOrDefault());
+            var result = await _userManager.AddToRoleAsync(user, role);
+
+            if (result.Succeeded)
+            {
+                TempData["confirm"] = "Nível de acesso do usuário " + user.Name + " foi alterado com sucesso.";
+                return RedirectToAction(nameof(Index), "Roles");
+            }
+            TempData["erro"] = "Não foi possível alterar o nível de acesso do usuário " + user.Name;
+            return RedirectToAction(nameof(Index), "Roles");
         }
     }
 }

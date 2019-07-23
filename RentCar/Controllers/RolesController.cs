@@ -21,6 +21,7 @@ namespace RentCar.Controllers
     {
         private readonly RoleManager<Role> _roleManager;
         private readonly ILogger<RolesController> _logger;
+        private readonly UserManager<User> _userManager;
         private readonly IMemoryCache _cache;
 
         // Tempo de duração do Cache
@@ -28,12 +29,14 @@ namespace RentCar.Controllers
         // Lista para guardar cache
         private List<Role> list;
 
-        public RolesController(RoleManager<Role> roleManager, ILogger<RolesController> logger, IMemoryCache cache)
+        public RolesController(RoleManager<Role> roleManager, ILogger<RolesController> logger, UserManager<User> userManager, IMemoryCache cache)
         {
             _roleManager = roleManager;
             _logger = logger;
+            _userManager = userManager;
             _cache = cache;
         }
+
 
 
         // Listar Get:
@@ -49,8 +52,14 @@ namespace RentCar.Controllers
             {
                 list = _cache.Get("role") as List<Role>;
             }
+            var viewModel = new UsersRoleViewModel { Roles = list, Users = await _userManager.Users.ToListAsync() };
+            var roles = new Dictionary<string, string>();
+            foreach (var user in viewModel.Users)
+                roles.Add(user.Id, (await _userManager.GetRolesAsync(user)).FirstOrDefault());
+
+            viewModel.RoleNames = roles;
             _logger.LogInformation("Listando todos níveis de acesso");
-            return View(list.OrderBy(x => x.Name));
+            return View(viewModel);
         }
 
         // Criar Get:
