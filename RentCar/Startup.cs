@@ -68,6 +68,9 @@ namespace RentCar
 
             services.AddTransient<IAddressService, AddressService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ICarService, CarService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

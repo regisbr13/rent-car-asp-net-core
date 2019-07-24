@@ -1,0 +1,34 @@
+﻿@model RentCar.Models.Car
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Deletar carro";
+}
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Excluir carro</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <div class="modal-body">
+                <p>
+                    Deseja mesmo excluir o carro?
+                </p>
+                <p>
+                    <strong>@Model.Brand</strong> - <strong>@Model.Model</strong>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -1,0 +1,41 @@
+﻿@model RentCar.Models.Account
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Novo saldo";
+}
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Cadastrar saldo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form asp-action="Create">
+            <div class="modal-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="User" class="control-label"></label>
+                    <select asp-for="UserId" asp-items="@ViewBag.users" class="form-control"></select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Balance" class="control-label"></label>
+                    <input asp-for="Balance" class="form-control" onkeyup="k(this)" />
+                    <span asp-validation-for="Balance" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-outline-primary btn-sm">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+

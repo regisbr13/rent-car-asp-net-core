@@ -27,6 +27,11 @@ namespace RentCar.Services
             return await _context.Set<TEntity>().FindAsync(id);
         }
 
+        public async Task<TEntity> FindByIdAsync(int id)
+        {
+            return await _context.Set<TEntity>().FindAsync(id);
+        }
+
         // Inserir elemento:
         public async Task InsertAsync(TEntity entity)
         {
@@ -50,6 +55,21 @@ namespace RentCar.Services
 
         // Remover elemento:
         public async Task RemoveAsync(string id)
+        {
+            try
+            {
+                var entity = await FindByIdAsync(id);
+                _context.Set<TEntity>().Remove(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new IntegrityException("Não pode ser excluído pois existem itens associados a este elemento.");
+            }
+
+        }
+
+        public async Task RemoveAsync(int id)
         {
             try
             {

@@ -1,0 +1,39 @@
+﻿@model RentCar.Models.Account
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Novo saldo";
+}
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Editar saldo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <div class="modal-body">
+                <p>Editar saldo do usuário <strong>@Model.User.Name</strong>:</p>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Balance" class="control-label"></label>
+                    <input asp-for="Balance" class="form-control" value="@Model.Balance.ToString("F2")" onkeyup="k(this)" />
+                    <span asp-validation-for="Balance" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-outline-primary btn-sm">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+

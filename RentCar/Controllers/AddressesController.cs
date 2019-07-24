@@ -29,21 +29,6 @@ namespace RentCar.Controllers
             _cache = cache;
         }
 
-        // Listar Get:
-        public async Task<IActionResult> Index()
-        {
-            if (!_cache.TryGetValue("adress", out list))
-            {
-                list = await _adressService.FindAllAsync();
-                _cache.Set("adress", list, cacheOptions);
-            }
-            else
-            {
-                list = _cache.Get("adress") as List<Address>;
-            }
-            return View(list.OrderBy(x => x.Street));
-        }
-
         // Detalhar Get:
         public async Task<IActionResult> Details(int? id)
         {
@@ -94,7 +79,7 @@ namespace RentCar.Controllers
             }
 
             TempData["erro"] = "Erro ao cadastrar.";
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Accounts");
         }
 
         // Editar Get:
@@ -154,7 +139,7 @@ namespace RentCar.Controllers
             }
 
             TempData["erro"] = "Erro ao editar.";
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Accounts");
         }
 
         // Delete Get:
@@ -186,17 +171,17 @@ namespace RentCar.Controllers
         }
 
         // Delete Post: 
-        [HttpPost]
+        [HttpPost("Deletar")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
                 await _adressService.RemoveAsync(id);
-                var obj = (_cache.Get("adress") as List<Address>).Find(x => x.Id == int.Parse(id));
+                var obj = (_cache.Get("adress") as List<Address>).Find(x => x.Id == id);
                 TempData["confirm"] = "Endereço deletado com sucesso.";
                 (_cache.Get("adress") as List<Address>).Remove(obj);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Accounts");
             }
             catch (IntegrityException e)
             {

@@ -18,7 +18,7 @@ namespace RentCar.Services
 
         new public async Task<User> FindByIdAsync(string userId)
         {
-            return await _context.User.Include(x => x.Addresses).Include(x => x.Rents).FirstOrDefaultAsync(x => x.Id == userId);
+            return await _context.User.Include(x => x.Addresses).Include(x => x.Rents).Include(x => x.Account).FirstOrDefaultAsync(x => x.Id == userId);
         }
     }
 }

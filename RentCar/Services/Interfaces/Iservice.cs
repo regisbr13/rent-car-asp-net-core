@@ -7,8 +7,11 @@ namespace RentCar.Services.Interfaces
     {
         Task<List<TEntity>> FindAllAsync();
         Task<TEntity> FindByIdAsync(string id);
+        Task<TEntity> FindByIdAsync(int id);
         Task InsertAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task RemoveAsync(string id);
+        Task RemoveAsync(int id);
+
     }
 }
