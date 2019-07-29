@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,10 +10,12 @@ using Microsoft.Extensions.Caching.Memory;
 using RentCar.Models;
 using RentCar.Services.Exceptions;
 using RentCar.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentCar.Controllers
 {
     [Route("Carros")]
+    [Authorize]
     public class CarsController : Controller
     {
         private readonly ICarService _carService;
@@ -194,6 +195,10 @@ namespace RentCar.Controllers
                 await _carService.RemoveAsync(id);
                 var obj = (_cache.Get("car") as List<Car>).Find(x => x.Id == id);
                 TempData["confirm"] = obj.Model + " foi deletado com sucesso.";
+                string path = obj.ImgPath;
+                path = path.Replace("~", "wwwroot");
+                System.IO.File.Delete(path);
+
                 (_cache.Get("car") as List<Car>).Remove(obj);
                 return RedirectToAction(nameof(Index));
             }

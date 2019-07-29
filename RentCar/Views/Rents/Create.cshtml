@@ -1,0 +1,107 @@
+﻿@model RentCar.Models.ViewModels.RentFormViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Novo aluguel";
+}
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Alugar veículo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form asp-action="Create">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <img src="@Url.Content(Model.Car.ImgPath)" height="150" />
+                    </div>
+                    <div class="col-md-6">
+                        <br />
+                        <p><strong>@Html.DisplayNameFor(model => model.Car.Brand): </strong>@Model.Car.Brand</p>
+                        <p><strong>@Html.DisplayNameFor(model => model.Car.Model): </strong>@Model.Car.Model</p>
+                        <p><strong>@Html.DisplayNameFor(model => model.Car.DailyPrice): </strong>@Model.Car.DailyPrice.ToString("C2")</p>
+                    </div>
+                </div>
+                <hr />
+                <input type="hidden" asp-for="Rent.CarId" value="@Model.Car.Id" />
+                <input type="hidden" asp-for="Car.Brand" />
+                <input type="hidden" asp-for="Car.Model" />
+                <input type="hidden" asp-for="Car.ImgPath" />
+                <input type="hidden" asp-for="Car.DailyPrice" id="dailyPrince" />
+
+                <div class="form-group">
+                    <label asp-for="Rent.Start" class="control-label"></label>
+                    <input asp-for="Rent.Start" class="form-control datepicker" id="start" value="" />
+                    <span asp-validation-for="Rent.Start" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Rent.End" class="control-label"></label>
+                    <input asp-for="Rent.End" class="form-control datepicker" id="end" value="" />
+                    <span asp-validation-for="Rent.End" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Rent.Value" class="control-label"></label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                        </div>
+                        <input asp-for="Rent.Value" class="result form-control phone" value="" id="total" readonly />
+                    </div>
+                    <span asp-validation-for="Rent.Value" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-outline-primary btn-sm">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+    $(".datepicker").datepicker({
+        autoclose: true,
+        calendarWeeks: true,
+        clearBtn: true,
+        todayBtn: true,
+        todayHighlight: true,
+        format: "yyyy-mm-dd",
+        language: "pt-BR"
+    })
+
+    $("#start").on('change', function () {
+        if (($("#start").val() !== "" && $("#start").val() !== undefined) && ($("#end").val() !== "" && $("#end").val() !== undefined)) {
+            var start = new Date($("#start").val());
+
+            var end = new Date($("#end").val());
+
+            var days = ((end - start) / 86400) / 1000;
+            var dailyPrince = parseFloat($("#dailyPrince").val());
+            var total = days * dailyPrince;
+
+            $("#total").val(total.toFixed(2).replace(".", ","))
+        }
+    })
+
+    $("#end").on('change', function () {
+        if (($("#start").val() !== "" && $("#start").val() !== undefined) && ($("#end").val() !== "" && $("#end").val() !== undefined)) {
+            var start = new Date($("#start").val());
+
+            var end = new Date($("#end").val());
+
+            var days = ((end - start) / 86400) / 1000;
+            var dailyPrince = parseFloat($("#dailyPrince").val());
+            var total = days * dailyPrince;
+
+            $("#total").val(total.toFixed(2).replace(".", ","))
+        }
+    })
+</script>
+
+

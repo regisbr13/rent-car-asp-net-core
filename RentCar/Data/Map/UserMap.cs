@@ -13,6 +13,8 @@ namespace RentCar.Data.Map
             builder.HasIndex(x => x.Cpf).IsUnique();
 
             builder.HasMany(x => x.Addresses).WithOne(x => x.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(x => x.Rents).WithOne(x => x.User).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.Account).WithOne(x => x.User).OnDelete(DeleteBehavior.Cascade);
 
             builder.ToTable("Usuarios");
         }

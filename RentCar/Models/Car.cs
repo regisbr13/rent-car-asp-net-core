@@ -22,6 +22,7 @@ namespace RentCar.Models
 
         [Display(Name = "Preço da diária")]
         [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:F2}", ApplyFormatInEditMode =true)]
         public double DailyPrice { get; set; }
 
         public ICollection<Rent> Rents { get; set; }

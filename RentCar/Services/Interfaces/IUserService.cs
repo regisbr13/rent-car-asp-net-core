@@ -7,5 +7,6 @@ namespace RentCar.Services.Interfaces
     public interface IUserService : Iservice<User>
     {
         new Task<User> FindByIdAsync(string userId);
+        Task<bool> CpfExist(string cpf, string id);
     }
 }

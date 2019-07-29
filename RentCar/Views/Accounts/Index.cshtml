@@ -70,7 +70,7 @@
                         <span class="input-group-text" id="basic-addon1"><i class="far fa-money-bill-alt fa-lg"></i></span>
                     </div>
                     @{
-                        if (Model.Account.Balance.ToString() != null)
+                        if (Model.Account != null)
                         {
                             <input type="text" class="form-control" placeholder="@Html.DisplayFor(model => model.Account.Balance)" aria-label="@Html.DisplayFor(model => model.Account.Balance)" aria-describedby="basic-addon1" disabled>
 
@@ -99,6 +99,36 @@
     <div class="card-body table-responsive">
         <partial name="_Addresses" model="@Model.Addresses" />
     </div>
+</div>
+
+<br />
+<div class="card">
+    <div class="card-header">
+        <div class="h3 row">
+            <div class="container">
+                <i class="fas fa-car-side fa-lg"></i> Meus Carros Alugados
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            @foreach (var item in Model.Rents)
+            {
+                <div class="col-md-4" style="margin-bottom:20px">
+                    <div class="card">
+                        <img class="card-img-top" src="@Url.Content(item.Car.ImgPath)" alt="Card image cap" height="300">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Car.Brand - @item.Car.Model</h5>
+                            <h6 class="card-text">@item.Start.ToShortDateString() - @item.End.ToShortDateString()</h6>
+                            <h5 class="card-text">
+                                <span class="badge badge-success">@Html.DisplayFor(modelItem => item.Value)</span>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
 </div>
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>

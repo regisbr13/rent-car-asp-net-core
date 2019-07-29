@@ -19,5 +19,10 @@ namespace RentCar.Services
         {
             return await _context.Accounts.Include(x => x.User).ToListAsync();
         }
+
+        public async Task<Account> GetAccountByUser(User user)
+        {
+            return await _context.Accounts.FirstOrDefaultAsync(x => x.UserId == user.Id);
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace RentCar.Models.ViewModels
 
         [Required(ErrorMessage = "campo obrigatório")]
         [Display(Name = "CPF")]
+        [Remote("UserCpfExist", "Accounts", AdditionalFields ="Id")]
         public string Cpf { get; set; }
 
         [Display(Name = "Telefone")]

@@ -1,4 +1,8 @@
-﻿@model ICollection<RentCar.Models.Car>
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<User> UserManager
+
+@model ICollection<RentCar.Models.Car>
 
 @{
     ViewData["Title"] = "Carros";
@@ -24,28 +28,43 @@
 <div class="border border-light rounded shadow">
     <div class="container">
         <p class="text-info h4">
-            <i class="fas fa-car-side fa-lg"></i> Saldos cadastrados
-            <button class="btn btn-outline-info createCar" data-toggle="tooltip" data-placement="right" title="Cadastrar saldo"><i class="fas fa-plus-circle fa-lg"></i></button>
+            <i class="fas fa-car-side fa-lg"></i> Carros cadastrados
+            @if (!User.IsInRole("Administrador"))
+            {
+            }
+            else
+            {
+                <button class="btn btn-outline-info createCar" data-toggle="tooltip" data-placement="right" title="Cadastrar carro"><i class="fas fa-plus-circle fa-lg"></i></button>
+            }
         </p>
         <hr />
         <div class="row">
             @foreach (var item in Model)
             {
-            <div class="col-md-4" style="margin-bottom:20px">
-                <div class="card">
-                    <img class="card-img-top" src="@Url.Content(item.ImgPath)" alt="Card image cap" height="300">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Brand - @item.Model</h5>
-                        <p class="card-text">
-                            <span class="badge badge-dark">@Html.DisplayFor(modelItem => item.DailyPrice)</span>
-                        </p>
-                    </div>
-                    <div class="card-footer btn-group-sm text-right">
-                        <button class="btn btn-outline-primary editCar" data-id="@item.Id" data-toggle="tooltip" data-placement="top" title="Editar carro">Editar</button>
-                        <button class="btn btn-outline-danger delCar" data-id="@item.Id" data-toggle="tooltip" data-placement="top" title="Excluir carro">Excluir</button>
+                <div class="col-md-4" style="margin-bottom:20px">
+                    <div class="card">
+                        <img class="card-img-top" src="@Url.Content(item.ImgPath)" alt="Card image cap" height="300">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Brand - @item.Model</h5>
+                            <h5 class="card-text">
+                                <span class="badge badge-dark">R$@Html.DisplayFor(modelItem => item.DailyPrice)</span>
+                            </h5>
+                        </div>
+                        @if (!User.IsInRole("Administrador"))
+                        {
+                            <div class="card-footer btn-group-sm text-center">
+                                <button class="btn btn-outline-info rentCreate btn-block" data-id="@item.Id" data-toggle="tooltip" data-placement="top" title="Alugar carro">Alugar veículo</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="card-footer btn-group-sm text-right">
+                                <button class="btn btn-outline-primary editCar" data-id="@item.Id" data-toggle="tooltip" data-placement="top" title="Editar carro">Editar</button>
+                                <button class="btn btn-outline-danger delCar" data-id="@item.Id" data-toggle="tooltip" data-placement="top" title="Excluir carro">Excluir</button>
+                            </div>
+                        }
                     </div>
                 </div>
-            </div>
             }
         </div>
         <br />
@@ -54,7 +73,4 @@
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
 
-@section Scripts{
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
 

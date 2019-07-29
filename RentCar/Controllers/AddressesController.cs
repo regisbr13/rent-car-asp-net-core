@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using RentCar.Models;
-using RentCar.Services;
 using RentCar.Services.Exceptions;
 using RentCar.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentCar.Controllers
 {
     [Route("Enderecos")]
+    [Authorize]
     public class AddressesController : Controller
     {
         private readonly IAddressService _adressService;

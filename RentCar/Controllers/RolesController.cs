@@ -5,18 +5,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using RentCar.Data;
 using RentCar.Models;
 using RentCar.Models.ViewModels;
 using RentCar.Services.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentCar.Controllers
 {
     [Route("Niveis-de-acesso")]
+    [Authorize]
     public class RolesController : Controller
     {
         private readonly RoleManager<Role> _roleManager;

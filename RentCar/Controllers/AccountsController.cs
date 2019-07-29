@@ -67,7 +67,7 @@ namespace RentCar.Controllers
                     await _userManager.AddToRoleAsync(user, role);
 
                     await _loginManager.SignInAsync(user, false);
-                   return LocalRedirect(returnUrl);
+                   return RedirectToAction(nameof(Index));
                 }
                 else
                 {
@@ -145,13 +145,20 @@ namespace RentCar.Controllers
         public async Task<JsonResult> UserEmailExist(string email, string Id)
         {
             if (string.IsNullOrEmpty(Id) && await _userManager.FindByEmailAsync(email) != null)
-                return Json("nome de usuário já cadastrado");
+                return Json("email já cadastrado");
             else if (!string.IsNullOrEmpty(Id) && await _userManager.FindByEmailAsync(email) != null)
             {
                 var obj = await _userManager.FindByEmailAsync(email);
                 if (obj.Id != Id)
                     return Json("nome de usuário já cadastrado");
             }
+            return Json(true);
+        }
+
+        public async Task<JsonResult> UserCpfExist(string cpf, string Id)
+        {
+            if (await _userService.CpfExist(cpf, Id))
+                return Json("CPF já cadastrado");
             return Json(true);
         }
 
@@ -208,6 +215,7 @@ namespace RentCar.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         [HttpGet("Excluir")]
         public async Task<IActionResult> Delete(string Id)
         {
@@ -225,11 +233,13 @@ namespace RentCar.Controllers
             return View(obj);
         }
 
+        [Authorize]
         [HttpPost("Excluir")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConf(string id)
         {
-
+            try
+            {
                 var user = await _userManager.FindByIdAsync(id);
                 var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
@@ -237,10 +247,16 @@ namespace RentCar.Controllers
                     TempData["confirm"] = user.Name + " foi deletado com sucesso.";
                     return RedirectToAction(nameof(Index), "Roles");
                 }
-            TempData["erro"] = "Não foi possível deletar o usuário";
-            return RedirectToAction(nameof(Index), "Roles");
+                TempData["erro"] = "Não foi possível deletar o usuário";
+                return RedirectToAction(nameof(Index), "Roles");
+            }
+            catch(DbUpdateException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
         }
 
+        [Authorize]
         [HttpGet("Editar-nivel-de-acesso")]
         public async Task<IActionResult> EditRole(string Id)
         {
@@ -260,11 +276,11 @@ namespace RentCar.Controllers
             return View(obj);
         }
 
+        [Authorize]
         [HttpPost("Editar-nivel-de-acesso")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditRole(string id, string role)
         {
-
             var user = await _userManager.FindByIdAsync(id);
             var userRole = await _userManager.GetRolesAsync(user);
             await _userManager.RemoveFromRoleAsync(user, userRole.FirstOrDefault());

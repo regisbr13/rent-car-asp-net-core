@@ -134,6 +134,15 @@ $(function () {
     })
 });
 
+$(function () {
+    $(".rentCreate").click(function () {
+        var id = $(this).attr("data-id");
+        $("#modal").load("/Aluguel/Novo?Id=" + id, function () {
+            $("#modal").modal();
+        })
+    })
+});
+
 function LoadImg(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -162,4 +171,5 @@ $(function () {
         v = v.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
         v = v.replace(/(\d)(\d{3}),/g, "$1.$2,");
         i.value = v;
-    }
+}
+
